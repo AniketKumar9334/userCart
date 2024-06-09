@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+  </head>
+  <body>
+    <nav>
+      <div>
+        <a href="/">Home</a>
+      </div>
+      <div class="cart">
+        <a href="./cart.html"
+          ><span class="material-symbols-outlined"> shopping_cart </span>
+          <span>Cart</span>
+          <p id="count">0</p></a
+        >
+      </div>
+    </nav>
+    <div class="container">
+      <main>
+        <div class="users cart-items"></div>
+      </main>
+    </div>
+    <script>
+      const ele = document.querySelector(".cart-items");
+      let dataArray = JSON.parse(localStorage.getItem("user-cart")) || [];
+
+      // let addCart = document.getElementById('add-cart')
+      let cartCount = document.getElementById("count");
+      cartCount.innerText = dataArray.length;
+      const displayCart = (data) =>{
+        data.map((item) => {
+          ele.innerHTML += `
+          <div class="user" key=${item.id}>
+              <div>
+                  <div>
+                      <p>Name:</p>
+                      <p>Email:</p>
+                      <p>username:</p>
+                  </div>
+                  <div >
+                      <p>${item.name}</p>
+                      <p>${item.email}</p>
+                      <p>${item.username}</p>
+                  </div>
+              </div>
+              <button id='remove-cart' onclick="removeToCart(${item.id})">Remove to cart</button>
+              
+          </div>
+          `
+        })
+      }
+      const removeToCart = (id) =>{
+        let index = dataArray.findIndex((item) => item.id === id);
+        if (index > -1) {
+          dataArray.splice(index, 1);
+          localStorage.setItem("user-cart", JSON.stringify(dataArray));
+          dataArray = JSON.parse(localStorage.getItem("user-cart"))
+          ele.innerHTML = ''
+          displayCart(dataArray)
+          cartCount.innerText = dataArray.length;
+        }
+      }
+      displayCart(dataArray)
+    </script>
+  </body>
+</html>
